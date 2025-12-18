@@ -11,7 +11,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 git branch: 'main',
-                    url: 'https://github.com/nexgen369/Practicals_Repo_Batch01.git',
+                    url: 'https://github.com/BhavaniBoyapati/Project1.git',
                     credentialsId: 'aws-credentials'
             }
         }
