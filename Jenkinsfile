@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         AWS_DEFAULT_REGION = 'us-east-1'
-        S3_BUCKET = 'shiva23690x'
+        S3_BUCKET = 'practicals-s3'
     }
 
     stages {
