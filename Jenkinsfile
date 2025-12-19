@@ -12,8 +12,7 @@ pipeline {
             steps {
                 git branch: 'main',
                     url: 'https://github.com/BhavaniBoyapati/Project1.git',
-                  
-            }
+           }
         }
 
         stage('Build React') {
