@@ -11,8 +11,8 @@ pipeline {
         stage('Checkout') {
             steps {
                 git branch: 'main',
-                    url: 'https://github.com/BhavaniBoyapati/Project1.git',
-           }
+                    url: 'https://github.com/BhavaniBoyapati/Project1.git'
+            }
         }
 
         stage('Build React') {
@@ -25,12 +25,12 @@ pipeline {
         stage('Deploy to S3 & Invalidate CloudFront') {
             steps {
                 withAWS(credentials: 'aws-credentials', region: 'us-east-1') {
-                    sh """
+                    sh '''
                       aws s3 sync build/ s3://${S3_BUCKET} --delete
                       aws cloudfront create-invalidation \
                         --distribution-id E1MS46HLDJURC4 \
                         --paths "/*"
-                    """
+                    '''
                 }
             }
         }
