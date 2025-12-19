@@ -12,7 +12,7 @@ pipeline {
             steps {
                 git branch: 'main',
                     url: 'https://github.com/BhavaniBoyapati/Project1.git',
-                    credentialsId: 'aws-credentials'
+                  
             }
         }
 
