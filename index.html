@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Page with Pipeline Status</title>
+    <title>Auth Page with Pipeline Status</title>
+
     <style>
         body {
             font-family: Arial, sans-serif;
             background: linear-gradient(135deg, #1f1c2c, #928dab);
             margin: 0;
-            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -21,74 +21,68 @@
             background-color: #2b2e4a;
             padding: 25px;
             border-radius: 10px;
+            width: 360px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-            width: 340px;
         }
 
-        .login-container h2 {
+        h2 {
             text-align: center;
             margin-bottom: 20px;
-            color: #f8f8f8;
         }
 
-        .login-container label {
-            display: block;
-            margin-bottom: 6px;
+        label {
             font-weight: bold;
             color: #dcdcdc;
+            display: block;
+            margin-bottom: 6px;
         }
 
-        .login-container input[type="text"],
-        .login-container input[type="password"] {
+        input {
             width: 100%;
             padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #555;
+            margin-bottom: 14px;
             border-radius: 5px;
+            border: 1px solid #555;
             background-color: #1f2235;
-            color: #ffffff;
-            box-sizing: border-box;
+            color: white;
         }
 
-        .login-container input::placeholder {
+        input::placeholder {
             color: #aaaaaa;
         }
 
-        .login-container button {
+        button {
             width: 100%;
             padding: 10px;
             background: linear-gradient(135deg, #6a11cb, #2575fc);
-            color: white;
             border: none;
+            color: white;
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
-            margin-top: 10px;
+            margin-top: 8px;
         }
 
-        .login-container button:hover {
+        button:hover {
             opacity: 0.9;
         }
 
-        .options {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .toggle {
+            text-align: center;
+            margin-top: 12px;
             font-size: 14px;
-            margin-bottom: 10px;
-            color: #cccccc;
         }
 
-        .options a {
+        .toggle a {
             color: #9aa9ff;
+            cursor: pointer;
             text-decoration: none;
         }
 
-        .options a:hover {
+        .toggle a:hover {
             text-decoration: underline;
         }
 
-        /* Pipeline Status Styles */
         .pipeline-status {
             margin-top: 15px;
             padding: 10px;
@@ -98,64 +92,84 @@
             display: none;
         }
 
-        .success {
-            background-color: #1e7e34;
-            color: #d4edda;
-        }
+        .success { background-color: #1e7e34; color: #d4edda; }
+        .failed { background-color: #842029; color: #f8d7da; }
+        .running { background-color: #664d03; color: #fff3cd; }
 
-        .failed {
-            background-color: #842029;
-            color: #f8d7da;
-        }
-
-        .running {
-            background-color: #664d03;
-            color: #fff3cd;
+        .hidden {
+            display: none;
         }
     </style>
 </head>
+
 <body>
 
 <div class="login-container">
-    <h2>Login</h2>
 
-    <form action="action_page.php" method="post">
-        <label for="username">Username</label>
-        <input type="text" id="username" name="username" placeholder="Enter your username" required>
+    <!-- LOGIN FORM -->
+    <div id="loginForm">
+        <h2>Login</h2>
 
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+        <label>Username</label>
+        <input type="text" placeholder="Enter username">
 
-        <div class="options">
-            <label>
-                <input type="checkbox" name="remember"> Remember Me
-            </label>
-            <a href="#">Forgot Password?</a>
+        <label>Password</label>
+        <input type="password" placeholder="Enter password">
+
+        <button>Login</button>
+
+        <button type="button" onclick="checkPipeline()">Check Pipeline Status</button>
+
+        <div id="pipelineStatus" class="pipeline-status"></div>
+
+        <div class="toggle">
+            Don't have an account?
+            <a onclick="toggleForms()">Sign Up</a>
         </div>
+    </div>
 
-        <button type="submit">Login</button>
-    </form>
+    <!-- SIGN UP FORM -->
+    <div id="signupForm" class="hidden">
+        <h2>Sign Up</h2>
 
-    <!-- Pipeline Status Feature -->
-    <button type="button" onclick="checkPipeline()">Check Pipeline Status</button>
+        <label>Username</label>
+        <input type="text" placeholder="Create username">
 
-    <div id="pipelineStatus" class="pipeline-status"></div>
+        <label>Email</label>
+        <input type="email" placeholder="Enter email">
+
+        <label>Password</label>
+        <input type="password" placeholder="Create password">
+
+        <label>Confirm Password</label>
+        <input type="password" placeholder="Confirm password">
+
+        <button>Register</button>
+
+        <div class="toggle">
+            Already have an account?
+            <a onclick="toggleForms()">Login</a>
+        </div>
+    </div>
+
 </div>
 
 <script>
+    function toggleForms() {
+        document.getElementById("loginForm").classList.toggle("hidden");
+        document.getElementById("signupForm").classList.toggle("hidden");
+    }
+
     function checkPipeline() {
         const statusDiv = document.getElementById("pipelineStatus");
-
         const statuses = [
             { text: "Pipeline Successful ✅", class: "success" },
             { text: "Pipeline Failed ❌", class: "failed" },
             { text: "Pipeline Running ⏳", class: "running" }
         ];
-
-        const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
-
-        statusDiv.textContent = randomStatus.text;
-        statusDiv.className = "pipeline-status " + randomStatus.class;
+        const random = statuses[Math.floor(Math.random() * statuses.length)];
+        statusDiv.textContent = random.text;
+        statusDiv.className = "pipeline-status " + random.class;
         statusDiv.style.display = "block";
     }
 </script>
